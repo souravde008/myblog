@@ -4,6 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse , JsonResponse
 from django.contrib.auth import authenticate, login
 from . models import Users
+from django.forms.models import model_to_dict
+import json
+
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 
@@ -12,20 +16,15 @@ def index(request):
 
 
 def login(request):
-    email=""
-    password = ""
-    if request.user.is_authenticated:
-        return render(request, 'home.html')
     if request.method == "POST":
-        email = request.POST.get('email','')
-        password = request.POST.get('password','')
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            login(request, user)
-            return render(request, 'home.html')
+        mail = request.POST.get('user_mail','')
+        password = request.POST.get('user_password','')
+        user = Users.objects.get(user_mail=mail)
+        if user.user_password == password:
+            request.session['user_id'] = user.pk
+            return redirect('../home/',{'user_id':request.session['user_id']})
         else:
             return HttpResponse("Not Done")
-        
     return render(request, 'login.html')
 
 def signup(request):
@@ -41,12 +40,14 @@ def signup(request):
         user = Users.objects.filter(user_mail=user_mail)
         if len(user) > 0:
             existuser = True
-            print(existuser)
+            # print(existuser)
             return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
         elif user_password != confirm_user_password:
             passwordnotmatch = True
-            print(passwordnotmatch)
+            # print(passwordnotmatch)
             return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
+        # user_password = make_password(password=user_password,salt=None,hasher='sha1')
+        # print(user_password)
         user = Users(user_name=user_name,user_mail=user_mail,user_phone = user_phone,user_password=user_password)
         user.save()
         done = True
@@ -54,13 +55,14 @@ def signup(request):
     return render(request,'signup.html')
 
 
-@login_required
 def logout(request):
-    django_logout(request)
+    
+    try:
+        del request.session['user_id']
+    except KeyError:
+        pass
     return redirect('/')
 
 
 def home(request):
-    if request.user.is_authenticated:
-        return render(request, 'home.html');
-    return redirect('/')
+    return render(request, 'home.html');
