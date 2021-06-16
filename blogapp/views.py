@@ -24,7 +24,7 @@ def login(request):
             request.session['user_id'] = user.pk
             return redirect('../home/',{'user_id':request.session['user_id']})
         else:
-            return HttpResponse("Not Done")
+            return HttpResponse("Not Done Here")
     return render(request, 'login.html')
 
 def signup(request):
@@ -46,8 +46,7 @@ def signup(request):
             passwordnotmatch = True
             # print(passwordnotmatch)
             return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
-        # user_password = make_password(password=user_password,salt=None,hasher='sha1')
-        # print(user_password)
+        
         user = Users(user_name=user_name,user_mail=user_mail,user_phone = user_phone,user_password=user_password)
         user.save()
         done = True
