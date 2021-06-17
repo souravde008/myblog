@@ -74,7 +74,7 @@
 <script>
 {% if done %}
     alert("Signup Successfully!");
-    window.location= '../login/'
+    window.location= '{% url 'home' %}'
 {% endif %}
 </script>
 {% endblock %}
