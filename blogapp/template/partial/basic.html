@@ -9,6 +9,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="../../static/css/font-awesome.min.css">
+
+
     <title>{% block title%} {% endblock %}</title>
     <style>
         {
@@ -31,9 +34,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        {% if request.session.user_id %}
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                        {% else %}
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+                        {% endif %}
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -51,7 +58,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <form class="d-flex">
                     <!-- <button class="btn btn-outline-warning mx-3">Signup</button> -->

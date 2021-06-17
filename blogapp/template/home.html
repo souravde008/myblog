@@ -1,5 +1,65 @@
 {% extends 'partial/basic.html' %} {% block title %} Login || Blog {% endblock %} {% block css %}{% endblock %} {% block body %}
 <div class="container mt-4">
-    <h1 class="text-center">Welcome {{request.session.user_id}}</h1>
+    <h1 class="text-center">Welcome {{user}}</h1>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBlog">
+      <li class="fa fa-plus"></li> Add Blog
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addBlog" tabindex="-1" aria-labelledby="addNew" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addNew">Add Your Blog</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Form
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Blog  title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editBlog">
+            <li class="fa fa-edit"></li> Edit
+        </button>
+        <a href="#" class="btn btn-danger"><li class="fa fa-trash-o"></li> Delete</a>
+      </div>
+    </div>
+
+
+
+
+    <!-- Button trigger modal -->
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="editBlog" tabindex="-1" aria-labelledby="blogContent" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="blogContent">Edit your Blog</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><li class="fa fa-close"></li> Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 {% endblock %} {% block js %} {% endblock %}
