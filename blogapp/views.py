@@ -83,9 +83,16 @@ def logout(request):
 
 def home(request):
     if request.session.get('user_id'):
-        user = Users.objects.get(id = request.session['user_id'])
-        user = user.user_name
-        return render(request, 'home.html',{'user':user});
+        try:
+            users = Blogs.objects.filter(user_id = request.session['user_id'])
+            name  = Users.objects.get(id = request.session['user_id'])
+
+        except:
+            return HttpResponse("Problem in id")
+        if len(users)>0:
+            return render(request, 'home.html',{'users':users,'user_name':name.user_name});
+        else:
+             return render(request, 'home.html',{'user_name':name.user_name});
     return redirect('/')
 
 
@@ -117,5 +124,7 @@ def addBlog(request):
 def editBlog(request):
     pass
 
-def deleteBlog(request):
-    pass
+def destroy(request,id):
+    blog = Blogs.objects.get(id=id)
+    blog.delete()
+    return redirect("home")
