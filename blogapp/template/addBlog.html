@@ -1,0 +1,30 @@
+{% extends 'partial/basic.html' %} {% block title %} Login || Blog {% endblock %} {% block css %}{% endblock %} {% block body %}
+<!-- <textarea name="editor1"></textarea>
+<script>
+        CKEDITOR.replace( 'editor1' );
+</script> -->
+<div class="container text-center">
+	<h1>Add Your Blog</h1>
+</div>
+
+<div class="container col-md-6 mt-4">
+	<form>
+	  <div class="mb-3">
+	    <label class="form-label">Title</label>
+	    <input type="text" class="form-control" id="">
+	  </div>
+	  <div class="mb-3">
+	  	<label class="form-label">Description</label>
+	    <textarea name="desc"></textarea>
+		
+	  </div>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+	  <button type="reset" class="btn btn-warning">Reset</button>
+	</form>
+</div>
+{% endblock %} 
+{% block js %}
+	<script>
+        CKEDITOR.replace( 'desc' );
+	</script>
+{% endblock %}

@@ -89,7 +89,10 @@ def home(request):
 
 
 def addBlog(request):
-    pass
+    if request.session.get('user_id'):
+        return render(request,'addBlog.html')
+    return redirect('/')
+
 
 def editBlog(request):
     pass
