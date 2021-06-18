@@ -10,10 +10,10 @@ class Users(models.Model):
 
 
 class Blogs(models.Model):
-	use_id = models.ForeignKey(Users, on_delete=models.CASCADE,default=0)
+	user = models.ForeignKey(Users, on_delete=models.CASCADE,default=None)
 	blog_title=models.CharField(max_length=255, default='Title Unavailable')
 	blog_desc = models.CharField(max_length=255, default='Description Unavailable')
 	blog_created_at = models.DateField()
-	blog_img = models.ImageField(upload_to="blog/",default="") 
+	blog_img = models.FileField(upload_to="blog/",default="")
 
 	

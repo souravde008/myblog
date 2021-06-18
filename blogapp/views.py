@@ -3,9 +3,10 @@ from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse , JsonResponse
 from django.contrib.auth import authenticate, login
-from . models import Users
+from . models import Users, Blogs
 from django.forms.models import model_to_dict
 import json
+from django.core.files.storage import FileSystemStorage
 
 from django.contrib.auth.hashers import make_password, check_password
 # Create your views here.
@@ -82,14 +83,33 @@ def logout(request):
 
 def home(request):
     if request.session.get('user_id'):
-        user= Users.objects.get(id = request.session['user_id'])
+        user = Users.objects.get(id = request.session['user_id'])
         user = user.user_name
         return render(request, 'home.html',{'user':user});
     return redirect('/')
 
 
 def addBlog(request):
+    done = False
     if request.session.get('user_id'):
+        user =  Users.objects.get(id = request.session.get('user_id'))
+        if request.method == 'POST':
+            blog_title = request.POST.get('blog_title','')
+            try:
+                img = request.FILES['imgfile']
+            except:
+                return HttpResponse("<h1>Reupload image</h1>")
+            fs = FileSystemStorage()
+            filename = fs.save(img.name, img)
+            uploaded_file_url = fs.url('/blog/{}'.format(filename))
+            blog_created_at = request.POST.get('blog_created_at','')
+            blog_desc = request.POST.get('blog_desc','')
+            print(user.id)
+            blog = Blogs(user_id=user.id,blog_title=blog_title,blog_img=img,blog_created_at=blog_created_at,blog_desc=blog_desc)
+            blog.save()
+            done = True
+            print(done)
+            return render(request,'addBlog.html',{'done':done})
         return render(request,'addBlog.html')
     return redirect('/')
 
