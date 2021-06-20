@@ -8,14 +8,39 @@
   <div class="row">
     <div class="col-md-4">
       {% for user in users%}
-      <div class="card" style="width: 18rem;">
+      <div class="card" style="width: 20rem;">
+        <img src='/media/{{user.blog_img}}' height="150" class="card-img-top" alt="{{user.blog_title}}">
         <div class="card-body">
           <h5 class="card-title">{{user.blog_title}}</h5>
-          <p class="card-text" id="desc_{{user.id}}">{{user.blog_desc}}</p>
-          <a href="{% url 'edit' %}" class="btn btn-primary" role="button" data-bs-toggle="button"><li class="fa fa-edit"></li> Edit</a>
-          <a href="../delete-blog/{{user.id}}" class="btn btn-danger"><li class="fa fa-trash-o"></li> Delete</a>
+          <p class="card-text" id="desc_{{user.id}}">{{user.blog_desc|safe}}....</p>
+          <a href="../edit-blog/{{user.id}}" class="btn btn-info"><li class="fa fa-edit"></li> Edit</a>
+          <a href="../show-blog/{{user.id}}" class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i> Show</a>
+          <!-- <a href="../delete-blog/{{user.id}}" class="btn btn-danger"><li class="fa fa-trash-o"></li> Delete</a> -->
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_{{user.id}}">
+            <li class="fa fa-trash-o"></li> Delete
+          </button>
         </div>
       </div>
+
+
+      <div class="modal fade" id="delete_{{user.id}}" tabindex="-1" aria-labelledby="delete_blog_{{user.id}}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 style="color:red">Are You Sure?</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><li class="fa fa-close"></li> No</button>
+        <a href="../delete-blog/{{user.id}}" class="btn btn-danger"><li class="fa fa-trash-o"></li> Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     </div>
     <div class="col-md-4">
       {% if forloop.counter|divisibleby:3 %}

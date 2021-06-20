@@ -8,6 +8,9 @@ urlpatterns = [
 
     path('home/',views.home,name='home'),
     path('add-blog/',views.addBlog,name='add'),
-    path('edit-blog/',views.editBlog,name='edit'),
+    path('edit-blog/<int:id>',views.editBlog,name='edit'),
+    path('update-blog/',views.updateBlog,name='update'),
     path('delete-blog/<int:id>',views.destroy,name='delete'),
+    path('show-blog/<int:id>',views.showBlog,name='show'),
+
 ]

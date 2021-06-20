@@ -108,7 +108,7 @@ def addBlog(request):
                 return HttpResponse("<h1>Reupload image</h1>")
             fs = FileSystemStorage()
             filename = fs.save(img.name, img)
-            uploaded_file_url = fs.url('/blog/{}'.format(filename))
+            uploaded_file_url = fs.url(filename)
             blog_created_at = request.POST.get('blog_created_at','')
             blog_desc = request.POST.get('blog_desc','')
             print(user.id)
@@ -121,10 +121,41 @@ def addBlog(request):
     return redirect('/')
 
 
-def editBlog(request):
-    pass
+def editBlog(request,id):
+    if request.session.get('user_id'):
+        blog = Blogs.objects.get(id=id)
+        return render(request,'editBlog.html',{'blog':blog})
+    return redirect('/')
+
+def updateBlog(request):
+    if request.session.get('user_id'):
+        if request.method == 'POST':
+            blog = Blogs.objects.get(id=request.POST.get('id'))
+            if blog == None:
+                return HttpResponse('<h2>Blog Not Found</h2>')
+            else:
+                if request.FILES.get('imgfile') != None:
+                    img = request.FILES['imgfile']
+                    fs = FileSystemStorage()
+                    uploaded_file_url = fs.save(img.name, img)
+                else:
+                    uploaded_file_url = None
+
+                if uploaded_file_url != None:
+                    blog.blog_img = uploaded_file_url
+                    print(blog.blog_img)
+                blog.blog_title = request.POST.get('blog_title')
+                blog.blog_desc = request.POST.get('blog_desc')
+                blog.blog_created_at= request.POST.get('blog_created_at')
+                blog.save()
+        return render(request,'editBlog.html')
+
 
 def destroy(request,id):
     blog = Blogs.objects.get(id=id)
     blog.delete()
     return redirect("home")
+
+def showBlog(request,id):
+    blog = Blogs.objects.get(id=id)
+    return render(request,'showBlog.html',{'blog':blog})

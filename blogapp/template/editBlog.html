@@ -1,0 +1,43 @@
+{% extends 'partial/basic.html' %} {% block title %} Login || Blog {% endblock %} {% block css %}{% endblock %} {% block body %}
+<!-- <textarea name="editor1"></textarea>
+<script>
+        CKEDITOR.replace( 'editor1' );
+</script> -->
+<div class="container text-center">
+	<h1>Edit Your Blog</h1>
+</div>
+
+<div class="container col-md-6 mt-4">
+	<form method="POST" enctype = "multipart/form-data" action="../update-blog/">
+          {% csrf_token %}
+          <input type="hidden" id="" name="id" value="{{blog.id}}">
+	  <div class="mb-3">
+	    <label class="form-label">Title</label>
+	    <input type="text" class="form-control" name="blog_title" id="" value="{{blog.blog_title}}">
+	  </div>
+	  <div class="row mb-3">
+	  	<div class="col-md-6">
+	  		<label class="form-label">Title Image</label>
+        <img src='/media/{{blog.blog_img}}' height="150" class="card-img-top" alt="{{user.blog_title}}">
+	    		<input type="file" class="form-control" name="imgfile" value="/media/blog/{{blog.blog_img}}">
+	  	</div>
+	  	<div class="col-md-6">
+	  		<label class="form-label">Date</label>
+	    		<input type="date" class="form-control" name="blog_created_at" id="" value="{{blog.blog_created_at|date:'Y-m-d'}}">
+	  	</div>
+	  </div>
+	  <div class="mb-3">
+	  	<label class="form-label">Description</label>
+	    <textarea name="blog_desc">{{blog.blog_desc}}</textarea>
+		
+	  </div>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+	  <button type="reset" class="btn btn-warning">Reset</button>
+	</form>
+</div>
+{% endblock %} 
+{% block js %}
+	<script>
+        CKEDITOR.replace( 'blog_desc' );
+	</script>
+{% endblock %}
