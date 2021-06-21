@@ -41,6 +41,7 @@ def signup(request):
     if not request.session.get('user_id'):
         existuser = False
         passwordnotmatch = False
+        existphone = False
         done = False
         if request.method == "POST":
             user_name = request.POST.get('user_name','')
@@ -49,20 +50,29 @@ def signup(request):
             user_password = request.POST.get('user_password','')
             confirm_user_password = request.POST.get('confirm_user_password','')
             user = Users.objects.filter(user_mail=user_mail)
+            phone = Users.objects.filter(user_phone=user_phone)
+            
             if len(user) > 0:
                 existuser = True
-                # print(existuser)
-                return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
+                print(existuser)
+                flags = {'existuser':existuser,'existphone':existphone,'passwordnotmatch':passwordnotmatch,'done':done}
+                return JsonResponse(flags)
+            elif len(phone)>0:
+                existphone = True
+                flags = {'existuser':existuser,'existphone':existphone,'passwordnotmatch':passwordnotmatch,'done':done}
+                return JsonResponse(flags)
             elif user_password != confirm_user_password:
                 passwordnotmatch = True
                 # print(passwordnotmatch)
-                return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
+                flags = {'existuser':existuser,'existphone':existphone,'passwordnotmatch':passwordnotmatch,'done':done}
+                return JsonResponse(flags)
             user_password = make_password(user_password)
             user = Users(user_name=user_name,user_mail=user_mail,user_phone = user_phone,user_password=user_password)
             user.save()
             done = True
             request.session['user_id'] = user.pk
-            return render(request,'signup.html',{'existuser':existuser,'passwordnotmatch':passwordnotmatch,'done':done})
+            flags = {'existuser':existuser,'existphone':existphone,'passwordnotmatch':passwordnotmatch,'done':done}
+            return JsonResponse(flags)
         return render(request,'signup.html')
     else:
         return redirect(home)
@@ -77,7 +87,8 @@ def logout(request):
         pass
     return redirect('/')
 
-
+def validation(request):
+    pass
 
 ################Content Page#################
 
