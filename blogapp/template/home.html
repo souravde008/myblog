@@ -8,17 +8,35 @@
   <div class="row">
     <div class="col-md-4">
       {% for user in users%}
-      <div class="card" style="width: 20rem;">
+      <div class="card mb-3" style="width: 20rem;">
         <img src='/media/{{user.blog_img}}' height="150" class="card-img-top" alt="{{user.blog_title}}">
         <div class="card-body">
           <h5 class="card-title">{{user.blog_title}}</h5>
           <p class="card-text" id="desc_{{user.id}}">{{user.blog_desc|safe}}....</p>
-          <a href="../edit-blog/{{user.id}}" class="btn btn-info"><li class="fa fa-edit"></li> Edit</a>
-          <a href="../show-blog/{{user.id}}" class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i> Show</a>
+          <a href="../edit-blog/{{user.id}}" class="btn btn-info btn-sm"><li class="fa fa-edit"></li> Edit</a>
+          <a href="../show-blog/{{user.id}}" class="btn btn-success btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Show</a>
           <!-- <a href="../delete-blog/{{user.id}}" class="btn btn-danger"><li class="fa fa-trash-o"></li> Delete</a> -->
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_{{user.id}}">
+
+          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete_{{user.id}}">
             <li class="fa fa-trash-o"></li> Delete
           </button>
+
+            {% if user.status %}
+          <div class="form-check form-switch">
+            {% csrf_token %}
+            <input class="form-check-input status" type="checkbox" data-id="{{user.id}}" id="status{{user.id}}" checked>
+            <label class="badge bg-warning text-dark" for="status{{user.id}}">Published</label>
+          </div>
+          {% else %}
+            <div class="form-check form-switch">
+            {% csrf_token %}
+            <input class="form-check-input status" type="checkbox" data-id="{{user.id}}" id="status{{user.id}}" unchecked>
+            <label class="badge bg-secondary" for="status{{user.id}}">Not Published</label>
+          </div>
+          {% endif %}
+            
+            
+          
         </div>
       </div>
 
@@ -44,10 +62,46 @@
     </div>
     <div class="col-md-4">
       {% if forloop.counter|divisibleby:3 %}
-      <div class="row">
-        <div class="col-md-4">
+      <!-- <div class="row">
+        <div class="col-md-4"> -->
       {% endif %}
     {% endfor %}
   </div>
 </div>
-{% endblock %} {% block js %} {% endblock %}
+{% endblock %} {% block js %}
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+       $(".status").on("click", function(){
+            var element = $(this);
+            var formData = {
+              'blog_id': $(this).attr("data-id"),
+              'csrfmiddlewaretoken': $('input[name = csrfmiddlewaretoken]').val(),
+            }
+           $.ajax({
+              type: "POST",
+              url: "{% url 'home' %}",
+              data: formData ,
+              dataType: "json",
+              encode: true,
+          }).done(function (data) {
+            console.log(data);
+            if(data.checked){
+              console.log(data.id)
+              $("label[for='status" + data.id + "']").text("Published")
+              console.log("true")
+            }
+            else{
+              console.log(data.id)
+              $("label[for='status" + data.id + "']").text("Not Published")
+              console.log("false")
+            }
+
+          });
+          // event.preventDefault();
+      });
+    });
+  </script>
+
+
+ {% endblock %}

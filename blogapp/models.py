@@ -15,5 +15,6 @@ class Blogs(models.Model):
 	blog_desc = models.CharField(max_length=255, default='Description Unavailable')
 	blog_created_at = models.DateField()
 	blog_img = models.FileField(upload_to="blog/",default="")
+	status=models.BooleanField(default=False)
 
 	

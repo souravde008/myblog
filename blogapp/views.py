@@ -94,10 +94,22 @@ def validation(request):
 
 def home(request):
     if request.session.get('user_id'):
+        if request.method=='POST':
+            checked = True
+            blog = Blogs.objects.get(id = request.POST.get('blog_id'))
+            print(blog.id)
+            if blog.status:
+                blog.status = checked = False
+                blog.save()
+            else:
+                blog.status = checked = True
+                blog.save()
+
+            return JsonResponse({'checked':checked,'id':blog.id})
+
         try:
             users = Blogs.objects.filter(user_id = request.session['user_id'])
             name  = Users.objects.get(id = request.session['user_id'])
-
         except:
             return HttpResponse("Problem in id")
         if len(users)>0:
@@ -170,3 +182,6 @@ def destroy(request,id):
 def showBlog(request,id):
     blog = Blogs.objects.get(id=id)
     return render(request,'showBlog.html',{'blog':blog})
+
+
+
