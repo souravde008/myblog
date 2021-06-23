@@ -7,6 +7,7 @@ class Users(models.Model):
     user_mail = models.EmailField(max_length=70,unique=True)
     user_phone = models.CharField(max_length=100)
     user_password = models.CharField(max_length=200,default='ABCD')
+    is_admin = models.BooleanField(default=False)
 
 
 class Blogs(models.Model):

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse , JsonResponse
 from django.contrib.auth import authenticate, login
 from . models import Users, Blogs
+from . backends import AuthBackend
 from django.forms.models import model_to_dict
 import json
 from django.core.files.storage import FileSystemStorage
@@ -22,18 +23,27 @@ def login(request):
     if not request.session.get('user_id'):
         # print("Enter")
         if request.method == "POST":
-            mail = request.POST.get('user_mail','')
+            mail = request.POST.get('user_mail')
             password = request.POST.get('user_password','')
-            try:
-                user = Users.objects.get(user_mail=mail)
-            except:
-                return HttpResponse("<h1>check email</h1>")
+            # try:
+            #     if '@' not in mail:
+            #         user = Users.objects.get(user_phone=mail)
+            #     else:
+            #         user = Users.objects.get(user_mail=mail)
+            # except:
+            #     return HttpResponse("<h1>check email</h1>")
 
-            if  check_password(password,user.user_password):
+            # if  check_password(password,user.user_password):
+            #     request.session['user_id'] = user.pk
+            #     return redirect('../home/')
+            # else:
+            #     return HttpResponse("Not Done Here")
+            user = AuthBackend.authenticate(request,username=mail, password=password)
+            if user is not None:
                 request.session['user_id'] = user.pk
                 return redirect('../home/')
             else:
-                return HttpResponse("Not Done Here")
+                return HttpResponse("<h1>Not Done</h1>")
         return render(request, 'login.html')
     else:
         return redirect(home)
@@ -182,6 +192,5 @@ def destroy(request,id):
 def showBlog(request,id):
     blog = Blogs.objects.get(id=id)
     return render(request,'showBlog.html',{'blog':blog})
-
 
 
