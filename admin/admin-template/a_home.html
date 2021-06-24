@@ -1,0 +1,43 @@
+{% extends 'basic/common.html' %}
+
+{% block title %} Login || Blog {% endblock %}
+
+{% block css %}{% endblock %} 
+{% block body %}
+<div class="row m-2">
+	<div class="col-md-11">
+<h1 class="text-center">Welcome Admin</h1>
+</div>
+<div class="col-md-1">
+<a href="{% url 'admin-logout' %}" type="button" class="btn btn-primary m-2 float-end">Logout</a>
+</div>
+</div>
+
+<div class="container">
+	<table class="table table-dark table-striped">
+  		<thead>
+		    <tr>
+		      <th scope="col" style="width:20%">Sl. No.</th>
+		      <th scope="col" style="width:20%">Blog Title</th>
+		      <th scope="col" style="width:20%">Blog Description</th>
+		      <th scope="col" style="width:20%">Blog Author</th>
+		      <th scope="col" style="width:20%">Blog Img</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+		  		{% for blog,username in alldata %}
+			    <tr>
+			      <th>{{forloop.counter}}</th>
+			      <td>{{blog.blog_title}}</td>
+			      <td>{{blog.blog_desc|safe}}</td>
+			      <td>{{username}}</td>
+			      <td><img src='/media/{{blog.blog_img}}' width="40%" class="img-thumbnail" alt="{{blog.blog_title}}"></td>
+
+			      
+			    </tr>
+			    {% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+{% block js %} {% endblock %}

@@ -91,8 +91,7 @@ def signup(request):
 def logout(request):
     try:
         del request.session['user_id']
-        global ses
-        ses = False
+        
     except KeyError:
         pass
     return redirect('/')
