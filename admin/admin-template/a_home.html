@@ -4,40 +4,29 @@
 
 {% block css %}{% endblock %} 
 {% block body %}
-<div class="row m-2">
-	<div class="col-md-11">
-<h1 class="text-center">Welcome Admin</h1>
-</div>
-<div class="col-md-1">
-<a href="{% url 'admin-logout' %}" type="button" class="btn btn-primary m-2 float-end">Logout</a>
-</div>
-</div>
+
 
 <div class="container">
-	<table class="table table-dark table-striped">
-  		<thead>
-		    <tr>
-		      <th scope="col" style="width:20%">Sl. No.</th>
-		      <th scope="col" style="width:20%">Blog Title</th>
-		      <th scope="col" style="width:20%">Blog Description</th>
-		      <th scope="col" style="width:20%">Blog Author</th>
-		      <th scope="col" style="width:20%">Blog Img</th>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-		  		{% for blog,username in alldata %}
-			    <tr>
-			      <th>{{forloop.counter}}</th>
-			      <td>{{blog.blog_title}}</td>
-			      <td>{{blog.blog_desc|safe}}</td>
-			      <td>{{username}}</td>
-			      <td><img src='/media/{{blog.blog_img}}' width="40%" class="img-thumbnail" alt="{{blog.blog_title}}"></td>
-
-			      
-			    </tr>
-			    {% endfor %}
-		</tbody>
-	</table>
+	<div class="row">
+	  <div class="col-sm-6">
+	    <div class="card">
+	      <div class="card-body">
+	        <h1 class="card-title"><i class="fa fa-user-circle" aria-hidden="true"></i> Total No. Of Users</h1>
+	        <h2 class="card-text">{{totalUsers}}</h2>
+	        <a href="{% url 'admin-users' %}" class="btn btn-primary">View Details</a>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-sm-6">
+	    <div class="card">
+	      <div class="card-body">
+	        <h1 class="card-title"><i class="fa fa-file-text" aria-hidden="true"></i> Total No. Of Blogs</h1>
+	        <h2 class="card-text">{{totalBlogs}}</h2>
+	        <a href="{% url 'admin-blogs' %}" class="btn btn-primary">View Details</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </div>
 {% endblock %}
 {% block js %} {% endblock %}

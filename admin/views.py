@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse , JsonResponse
 from . backends import AuthBackend
 from blogapp.models import Users, Blogs
+from django.contrib.auth.decorators import login_required
+from blog.decorators import admin_required
 # Create your views here.
 def index(request):
 	if not request.session.get('admin_id'):
@@ -18,7 +20,7 @@ def index(request):
 		return render(request, 'a_login.html')
 	return redirect("admin-home")
 
-
+@admin_required
 def logout(request):
     try:
         del request.session['admin_id']
@@ -28,19 +30,38 @@ def logout(request):
     return redirect('admin-index')
 
 
-
+@admin_required
 def home(request):
-	if request.session.get('admin_id'):
-		blogs = Blogs.objects.all()
-		users = []
-		for blog in blogs:
-			ids = blog.user_id
-			# print(ids)
-			user = Users.objects.filter(id = ids)
-			for usr in user:
-				users.append(usr.user_name)
+	totalBlogs = Blogs.objects.all().count()
+	totalUsers = Users.objects.all().count()
+	# users = []
+	# for blog in blogs:
+	# 	ids = blog.user_id
+	# 	# print(ids)
+	# 	user = Users.objects.filter(id = ids)
+	# 	for usr in user:
+	# 		users.append(usr.user_name)
 
-		# print(users)
-		alldata = zip(blogs,users)
-		return render(request,'a_home.html',{'alldata':alldata})
-	return redirect("admin-index")
+	# # print(users)
+	# alldata = zip(blogs,users)
+	return render(request,'a_home.html',{'totalUsers':totalUsers,'totalBlogs':totalBlogs})
+	
+@admin_required
+def blogs(request):
+	blogs = Blogs.objects.all()
+	users = []
+	for blog in blogs:
+		ids = blog.user_id
+		# print(ids)
+		user = Users.objects.filter(id = ids)
+		for usr in user:
+			users.append(usr.user_name)
+
+	# print(users)
+	alldata = zip(blogs,users)
+	return render(request, 'a_blog.html',{'alldata':alldata})
+
+@admin_required
+def users(request):
+	users = Users.objects.all()
+	return render(request, 'a_user.html', {'users':users})
